@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . /app
 
 # Устанавливаем зависимости из requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt
 
 # Открываем порт для приложения Flask (по умолчанию Flask использует порт 5000)
 EXPOSE 5000
