@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barcode Viewer</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        .buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <img src="{{ url_for('static', filename='images/ean13.png') }}" alt="Barcode Image">
+    
+    <form action="/generate" method="POST" style="margin-top: 20px;">
+        <input type="text" name="code" placeholder="Enter EAN-13 Code" maxlength="12" required>
+        <button type="submit">Generate EAN-13</button>
+    </form>
+
+    <div class="buttons">
+        <a href="/previous"><button>Previous</button></a>
+        <a href="/next"><button>Next</button></a>
+        <a href="/upload"><button>Upload New Image</button></a>
+    </div>
+</body>
+</html>
+

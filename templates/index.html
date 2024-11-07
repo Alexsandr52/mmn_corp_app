@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>mm_sup_app</title>
+</head>
+<body>
+    <!-- Контейнер для изображения с фиксированным размером -->
+    <div class="image-container">
+        <img id="displayImage" src="{{ url_for('static', filename='images/upc.svg') }}" alt="Centered Image">
+    </div>
+    
+    <!-- Радио-кнопки для смены изображения -->
+    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+        
+        <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" checked>
+        <label class="btn btn-outline-primary" for="btnradio2">
+            ШК КСО
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-upc" viewBox="0 1 16 16">
+                <path d="M3 4.5a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0z"/>
+            </svg>
+        </label>
+        
+        <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" >
+        <label class="btn btn-outline-primary" for="btnradio1">
+            Data Matrix 
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-qr-code" viewBox="0 0 16 16">
+                <path d="M2 2h2v2H2z"/>
+                <path d="M6 0v6H0V0zM5 1H1v4h4zM4 12H2v2h2z"/>
+                <path d="M6 10v6H0v-6zm-5 1v4h4v-4zm11-9h2v2h-2z"/>
+                <path d="M10 0v6h6V0zm5 1v4h-4V1zM8 1V0h1v2H8v2H7V1zm0 5V4h1v2zM6 8V7h1V6h1v2h1V7h5v1h-4v1H7V8zm0 0v1H2V8H1v1H0V7h3v1zm10 1h-1V7h1zm-1 0h-1v2h2v-1h-1zm-4 0h2v1h-1v1h-1zm2 3v-1h-1v1h-1v1H9v1h3v-2zm0 0h3v1h-2v1h-1zm-4-1v1h1v-2H7v1z"/>
+                <path d="M7 12h1v3h4v1H7zm9 2v2h-3v-1h2v-1z"/>
+            </svg>
+        </label>
+    </div>
+
+    <!-- Кнопка для открытия модального окна -->
+    <button type="button" class="btn btn-primary btn-lg add-button" data-bs-toggle="modal" data-bs-target="#addBarcodeModal">
+        Добавить ШК
+    </button>
+
+    <!-- Модальное окно для добавления ШК -->
+    <div class="modal fade" id="addBarcodeModal" tabindex="-1" aria-labelledby="addBarcodeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addBarcodeModalLabel">Добавить ШК</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="/save_barcode">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">#</span>
+                            <input type="text" class="form-control" placeholder="Код ШК" name="barcode" required>
+                        </div>
+                    
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">@</span>
+                            <input type="text" class="form-control" placeholder="Тег" name="tag" required>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                            <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Скрипт для смены изображения при выборе радио-кнопки -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const displayImage = document.getElementById("displayImage");
+
+            document.getElementById("btnradio1").addEventListener("change", function() {
+                if (this.checked) {
+                    displayImage.src = "{{ url_for('static', filename='images/data_matrix.jpeg') }}";
+                }
+            });
+
+            document.getElementById("btnradio2").addEventListener("change", function() {
+                if (this.checked) {
+                    displayImage.src = "{{ url_for('static', filename='images/upc.svg') }}";
+                }
+            });
+        });
+    </script>
+</body>
+</html>
