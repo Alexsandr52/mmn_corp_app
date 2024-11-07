@@ -4,16 +4,16 @@
     "description": "Progressive Web App for Barcode Scanner",
     "start_url": "/",
     "background_color": "#ffffff",
-    "theme_color": "#4CAF50",
+    "theme_color": "#ffffff",
     "display": "standalone",
     "icons": [
       {
-        "src": "static/icons/icon-192x192.png",
+        "src": "static/icons/3479853.png",
         "sizes": "192x192",
         "type": "image/png"
       },
       {
-        "src": "static/icons/icon-512x512.png",
+        "src": "static/icons/3479853.png",
         "sizes": "512x512",
         "type": "image/png"
       }
