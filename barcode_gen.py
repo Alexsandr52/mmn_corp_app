@@ -1,12 +1,9 @@
-# import EAN13 from barcode module 
 from barcode import EAN13 
-  
-# Make sure to pass the number as string 
-number = '4121000141152'
-  
-# Now, let's create an object of EAN13 
-# class and pass the number 
-my_code = EAN13(number) 
-  
-# Our barcode is ready. Let's save it. 
-my_code.save("static/images")
+
+def make_barcode(code):
+    number = str(code)
+    my_code = EAN13(number)
+    path = f"static/images/{code}"
+    my_code.save(path)
+    return path  # Возвращаем путь к изображению
+
