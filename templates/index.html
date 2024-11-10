@@ -16,14 +16,21 @@
         </div>
 
         <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-            <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" checked>
-            <label class="btn btn-outline-primary" for="btnradio2">ШК КСО</label>
-            
-            <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off">
-            <label class="btn btn-outline-primary" for="btnradio1">Data Matrix</label>
+            <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+            <label class="btn btn-outline-primary" for="btnradio1">ШК КСО</label>
+
+            <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+            <label class="btn btn-outline-primary" for="btnradio2">Data Matrix</label>
         </div>
 
-        <div class="res-used"></div>
+        <div class="res-used">
+            {% for item in items %}
+            <div class="res-card" data-img="{{ url_for('static', filename=item['img_link'].split('static/')[1]) }}">
+                <p class="card-title">{{ item['name'] }}</p>
+                <p class="ucp-nums">{{ item['img_link'] }}</p>
+            </div>
+            {% endfor %}
+        </div>
 
         <button type="button" class="btn btn-primary btn-lg add-button" data-bs-toggle="modal" data-bs-target="#addBarcodeModal">
             Добавить ШК
@@ -59,92 +66,50 @@
     </div>
 
     {% if barcode_path %}
-    <!-- Модальное окно с изображением штрихкода -->
     <div id="barcodeModal" class="modal-overlay active">
         <div class="modal-content">
-            <img src="{{ url_for('static', filename=barcode_path.split('static/')[1]) }}" alt="Сгенерированный штрихкод">
+            <img id="modalImage" src="{{ url_for('static', filename=barcode_path.split('static/')[1]) }}" alt="Сгенерированный штрихкод">
         </div>
     </div>
     {% endif %}
 
     <script>
-
-        // Функция для открытия модального окна с изображением
-function openModalWithImage(imagePath) {
-    const barcodeModal = document.getElementById('barcodeModal');
-    const modalImage = barcodeModal.querySelector('img');
-    modalImage.src = imagePath;
-    barcodeModal.classList.add('active');
-}
-
-// Добавляем обработчик закрытия модального окна при загрузке страницы
-document.addEventListener("DOMContentLoaded", function() {
-    const barcodeModal = document.getElementById('barcodeModal');
-
-    if (barcodeModal) {
-        // Закрываем модальное окно при клике на само изображение или на оверлей
-        barcodeModal.addEventListener("click", function(event) {
-            // Закрываем окно только если клик вне изображения
-            if (event.target === barcodeModal || event.target.tagName === 'IMG') {
-                barcodeModal.classList.remove("active");
-            }
-        });
-    }
-});
-
         document.addEventListener("DOMContentLoaded", function() {
             const displayImage = document.getElementById("displayImage");
+            const barcodeModal = document.getElementById("barcodeModal");
+            const cards = document.querySelectorAll('.res-card');
 
-            // Смена изображения
+            // Обработчик для переключения изображений ШК
             document.getElementById("btnradio1").addEventListener("change", function() {
-                if (this.checked) {
-                    displayImage.src = "{{ url_for('static', filename='images/data_matrix.jpeg') }}";
-                }
+                displayImage.src = "{{ url_for('static', filename='images/upc.svg') }}";
             });
 
             document.getElementById("btnradio2").addEventListener("change", function() {
-                if (this.checked) {
-                    displayImage.src = "{{ url_for('static', filename='images/upc.svg') }}";
-                }
+                displayImage.src = "{{ url_for('static', filename='images/data_matrix.jpeg') }}";
             });
 
-            // Функция для сохранения пути в localStorage
-            function saveBarcodePath(barcodePath) {
-                let savedPaths = JSON.parse(localStorage.getItem('barcodePaths')) || [];
-                savedPaths.push(barcodePath);
-                localStorage.setItem('barcodePaths', JSON.stringify(savedPaths));
-            }
-
-            // Восстановление карточек из localStorage
-            const resUsedContainer = document.querySelector('.res-used');
-            const savedPaths = JSON.parse(localStorage.getItem('barcodePaths')) || [];
-            
-            savedPaths.forEach((path, index) => {
-                const card = document.createElement('div');
-                card.className = 'upc-card';
-                card.innerHTML = `
-                    <img src="${path}" alt="Icon ${index + 1}">
-                    <p class="title-card">Item ${index + 1}</p>
-                    <p class="card-info">${path}</p>
-                `;
-                card.addEventListener('click', () => openModalWithImage(path));
-                resUsedContainer.appendChild(card);
+            // Привязываем обработчик кликов на карточки
+            cards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const imgUrl = card.getAttribute('data-img');
+                    openModalWithImage(imgUrl);
+                });
             });
 
-            function openModalWithImage(imagePath) {
-                const barcodeModal = document.getElementById('barcodeModal');
-                if (barcodeModal) {
-                    const modalImage = barcodeModal.querySelector('img');
-                    modalImage.src = imagePath;
-                    barcodeModal.classList.add('active');
-                }
+            // Функция открытия модального окна с изображением
+            function openModalWithImage(url) {
+                const modalImage = document.getElementById("modalImage");
+                const modalOverlay = document.getElementById("barcodeModal");
+                modalImage.src = url;
+                modalOverlay.classList.add("active");
             }
 
-            // Закрытие модального окна при клике
-            const barcodeModal = document.getElementById("barcodeModal");
+            // Закрытие модального окна по клику на фон или картинку
             if (barcodeModal) {
-                barcodeModal.addEventListener("click", function() {
-                    barcodeModal.classList.remove("active");
+                barcodeModal.addEventListener("click", function(event) {
+                    if (event.target === barcodeModal || event.target.tagName === 'IMG') {
+                        barcodeModal.classList.remove("active");
+                    }
                 });
             }
         });

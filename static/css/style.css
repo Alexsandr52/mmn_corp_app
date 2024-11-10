@@ -6,6 +6,10 @@ body {
     margin: 0;
     font-family: Arial, sans-serif;
 }
+p{
+    margin: 0;
+}
+
 img {
     width: 100%;
     height: auto;
@@ -39,7 +43,7 @@ img {
 }
 
 button {
-    width: 90%;
+    width: 95%;
     font-size: 16px;
     transition: background-color 0.3s;
 }
@@ -71,6 +75,17 @@ button:hover {
     margin: 0 auto;
 }
 
+.res-card {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px;
+    width: 100%;
+    max-height: 130px;
+    border: 2px solid #0d6efd;
+    border-radius: 10px;
+}
+
 .upc-card {
     display: flex;
     align-items: center;
@@ -83,7 +98,7 @@ button:hover {
     transition: background-color 0.2s;
 }
 
-.upc-card:hover {
+.upc-card:active {
     background-color: #e9ecef;
 }
 
@@ -95,19 +110,10 @@ button:hover {
     object-fit: cover;
 }
 
-.title-card {
+.card-title {
     font-weight: bold;
-    font-size: 14px;
-    margin: 0;
+    font-size: 16px;
     color: #333;
-}
-
-.card-info {
-    font-size: 12px;
-    color: #888;
-    margin: 0;
-    margin-left: auto;
-    font-weight: bold;
 }
 
 .modal-overlay {
@@ -133,8 +139,8 @@ button:hover {
 }
 
 .modal-content {
-    width: 90%;
-    max-width: 400px;
+    margin: 10px;
+    width: 95%;
     background: white;
     padding: 20px;
     border-radius: 8px;
